@@ -1,0 +1,11 @@
+---
+general:
+  services:
+    - pprotein-agent
+    # TODO: goのサービス名（当日に修正して使用する）
+    - mysql
+    - nginx
+
+repository:
+  remote: git@github.com:yuji-matsunami/isucon14.git
+  dest: /home/isucon/repo

@@ -1,0 +1,48 @@
+---
+- name: set hostname
+  hostname:
+    name: "{{ inventory_hostname_short }}"
+
+- name: install tools
+  apt:
+    update_cache: yes
+    pkg:
+      - dstat
+      - fish
+      - graphviz
+      - gv
+      - htop
+      - nano
+      - netdata
+      - percona-toolkit
+      - rsync
+      - unzip
+      - musl
+
+- name: put /etc/sysctl.d/isucon.conf
+  copy:
+    src: isucon.conf
+    dest: /etc/sysctl.d/isucon.conf
+    mode: 0644
+  register: sysctl
+
+- name: sysctl -p /etc/sysctl.d/isucon.conf
+  command: sysctl -p /etc/sysctl.d/isucon.conf
+  when: sysctl.changed
+
+- name: create service.d
+  file:
+    state: directory
+    path: /etc/systemd/system/{{ item }}.service.d
+  loop: "{{ general.services }}"
+
+- name: override systemd services
+  copy:
+    src: override.conf
+    dest: /etc/systemd/system/{{ item }}.service.d/override.conf
+    mode: 0644
+  loop: "{{ general.services }}"
+
+- name: systemd daemon-reload
+  systemd:
+    daemon_reload: yes

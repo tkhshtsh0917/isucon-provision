@@ -1,0 +1,19 @@
+---
+- hosts: srv
+  become: yes
+  roles:
+    - name: general
+      tags:
+        - general
+    - name: keys
+      tags:
+        - keys
+    - name: repository
+      tags:
+        - repository
+    - name: golang
+      tags:
+        - golang
+    - name: profiler
+      tags:
+        - profiler

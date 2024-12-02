@@ -1,0 +1,12 @@
+---
+- hosts: srv
+  become: yes
+  tasks:
+    - name: stop services
+      systemd:
+        name: "{{ item }}"
+        enabled: no
+        state: stopped
+      loop:
+        - netdata
+        - pprotein-agent
